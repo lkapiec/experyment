@@ -6,6 +6,22 @@
     <groupId>org.example</groupId>
     <artifactId>experyment</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>SomeProjecToLearnSth</name>
+    <url>http://lenic.eu</url>
+    <developers>
+        <developer>
+            <name>Łukasz Kapiec</name>
+            <email>lukasz@lenic.eu</email>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+            <site>
+            <id>nexus-site</id>
+            <url>scp:lenic.eu/katalog</url>
+            </site>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
@@ -19,8 +35,18 @@
         </dependency>
         <dependency>
             <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon</artifactId>
+            <artifactId>wagon-ssh</artifactId>
             <version>3.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
 
@@ -41,10 +67,46 @@
                     <archive>
                         <manifestEntries>
                             <Klucz>Wartosc</Klucz>
+                            <Created-By>SomeTeam</Created-By>
                         </manifestEntries>
                         <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>2.0.2</version>
+                <executions>
+                    <execution>
+                    <id>upload-file</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>
+                                upload
+                            </goal>
+                        </goals>
+                        <configuration>
+                            <fromDir>
+                                local.dir
+                            </fromDir>
+                            <includes>*</includes>
+                            <excludes>pom.xml</excludes>
+                            <url>scp:localhost</url>
+                            <toDir>remote.dir</toDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.1.1</version>
             </plugin>
         </plugins>
         </pluginManagement>
